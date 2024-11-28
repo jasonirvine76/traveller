@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "search_and_filter",
+    "rdfstore",
 ]
 
 MIDDLEWARE = [
