@@ -77,7 +77,13 @@
                             </tr>
                             <tr>
                                 <td class="font-medium">Time Spent:</td>
-                                <td>{{ destination.timeSpent }} minutes</td>
+                                <td>
+                                {% if destination.timeSpent != "-" %}
+                                    {{ destination.timeSpent }} minutes
+                                {% else %}
+                                    {{ destination.timeSpent }}
+                                {% endif %}
+                                </td>
                             </tr>
                             <tr>
                                 <td class="font-medium">Latitude:</td>
