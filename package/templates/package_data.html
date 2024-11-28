@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search</title>
+</head>
+<body>
+    <h1>Search for Places in Packages</h1>
+
+    <form method="get" action="">
+        <input type="text" name="search" placeholder="Search..." value="{{ search_term }}">
+        <button type="submit">Search</button>
+    </form>
+
+    {% if results %}
+        <table border="1">
+            <tr>
+                <th>Package ID</th>
+                <th>Place 1</th>
+                <th>Place 2</th>
+                <th>Place 3</th>
+                <th>Place 4</th>
+                <th>Place 5</th>
+            </tr>
+            {% for result in results %}
+            <tr>
+                <td>{{ result.package }}</td>
+                <td>{{ result.place1 }}</td>
+                <td>{{ result.place2 }}</td>
+                <td>{{ result.place3 }}</td>
+                <td>{{ result.place4 }}</td>
+                <td>{{ result.place5 }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No results found for "{{ search_term }}".</p>
+    {% endif %}
+</body>
+</html>

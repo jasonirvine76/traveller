@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Traveller Data</title>
+</head>
+<body>
+    <h1>Traveller Data</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Predicate</th>
+                <th>Object</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
+                <tr>
+                    <td>{{ result.localName</td>
+                    <td>{{ result.tourismArea }}</td>
+                    <td>{{ result.description }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

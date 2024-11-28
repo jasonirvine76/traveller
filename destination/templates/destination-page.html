@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ destination.name }} - Destination Wiki</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <!-- Header -->
+    <header class="bg-blue-900 text-white py-4">
+        <div class="container mx-auto flex items-center justify-between">
+            <h1 class="text-3xl font-bold">Destination Wiki</h1>
+            <nav class="space-x-4">
+                <a href="/" class="hover:underline">Home</a>
+                <a href="/destinations" class="hover:underline">All Destinations</a>
+                <a href="/about" class="hover:underline">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto my-8 px-4">
+        <div class="bg-white shadow-md rounded-md overflow-hidden">
+            <!-- Title and Hero Section -->
+            <div class="relative bg-blue-700 text-white py-10 px-6">
+                <h2 class="text-4xl font-bold">{{ destination.name }}</h2>
+                <p class="mt-2 text-lg italic">{{ destination.category }}</p>
+                <div class="absolute inset-0 bg-blue-900 opacity-20"></div>
+            </div>
+
+            <!-- Main Body -->
+            <div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <!-- Main Content Section -->
+                <div class="lg:col-span-2">
+                    <!-- Description Section -->
+                    <section class="mb-6">
+                        <h3 class="text-2xl font-semibold mb-2">Description</h3>
+                        <p class="text-justify text-gray-700">{{ destination.description }}</p>
+                    </section>
+
+                    <!-- Map Section -->
+                    <section class="mb-6">
+                        <h3 class="text-2xl font-semibold mb-2">Map</h3>
+                        <iframe 
+                            src="https://www.google.com/maps?q={{ destination.latitude }},{{ destination.longitude }}&output=embed"
+                            class="w-full h-64 rounded-md shadow-md"
+                            allowfullscreen>
+                        </iframe>
+                    </section>
+                </div>
+
+                <!-- Infobox Section -->
+                <aside class="bg-gray-50 p-4 rounded-md shadow-md lg:col-span-1">
+                    <h3 class="text-xl font-semibold mb-4 text-center">{{ destination.name }}</h3>
+                    <table class="table-auto w-full text-sm">
+                        <tbody>
+                            <tr>
+                                <td class="font-medium">Name:</td>
+                                <td>{{ destination.name }}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">Category:</td>
+                                <td>{{ destination.category }}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">City:</td>
+                                <td>{{ destination.city }}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">Price:</td>
+                                <td>{{ destination.price }} IDR</td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">Rating:</td>
+                                <td>{{ destination.rating }}/5</td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">Time Spent:</td>
+                                <td>{{ destination.timeSpent }} minutes</td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">Latitude:</td>
+                                <td>{{ destination.latitude }}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">Longitude:</td>
+                                <td>{{ destination.longitude }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-blue-900 text-white py-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Destination Wiki. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
