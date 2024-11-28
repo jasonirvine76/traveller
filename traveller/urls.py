@@ -21,4 +21,5 @@ urlpatterns = [
     path('search/', include("search_and_filter.urls")),
     path('rdfstore/', include("rdfstore.urls")),
     path('package/', include("package.urls")),
+    path('destination/', include("destination.urls")),
 ]

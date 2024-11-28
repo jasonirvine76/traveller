@@ -3,6 +3,11 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 from rdfstore.views import query_graphdb
 
 GRAPHDB_ENDPOINT = "http://localhost:7200/repositories/traveller"
+LOCAL_ENDPOINT = "http://127.0.0.1:8000/destination/"
+REMOTE_ENDPOINT = "http://tourism-2024.org/data/"
+
+def replace_base_url(iri):
+    return iri.replace(REMOTE_ENDPOINT, LOCAL_ENDPOINT) if iri else ""
 
 # Create your views here.
 def search_package(request):
@@ -61,6 +66,11 @@ def search_package(request):
                 "place3": row["Place3"]["value"],
                 "place4": row["Place4"]["value"],
                 "place5": row["Place5"]["value"],
+                "place1_iri": replace_base_url(row["firstPlaceID"]["value"]),
+                "place2_iri": replace_base_url(row["secondPlaceID"]["value"]),
+                "place3_iri": replace_base_url(row["thirdPlaceID"]["value"]),
+                "place4_iri": replace_base_url(row["fourthPlaceID"]["value"]),
+                "place5_iri": replace_base_url(row["fifthPlaceID"]["value"]),
             })
     else:
         print("No results found or error in query execution.")

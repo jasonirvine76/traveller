@@ -24,11 +24,41 @@
             {% for result in results %}
             <tr>
                 <td>{{ result.package }}</td>
-                <td>{{ result.place1 }}</td>
-                <td>{{ result.place2 }}</td>
-                <td>{{ result.place3 }}</td>
-                <td>{{ result.place4 }}</td>
-                <td>{{ result.place5 }}</td>
+                <td>
+                    {% if result.place1_iri %}
+                        <a href="{{ result.place1_iri }}" target="_blank">{{ result.place1 }}</a>
+                    {% else %}
+                        {{ result.place1 }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if result.place2_iri %}
+                        <a href="{{ result.place2_iri }}" target="_blank">{{ result.place2 }}</a>
+                    {% else %}
+                        {{ result.place2 }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if result.place3_iri %}
+                        <a href="{{ result.place3_iri }}" target="_blank">{{ result.place3 }}</a>
+                    {% else %}
+                        {{ result.place3 }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if result.place4_iri %}
+                        <a href="{{ result.place4_iri }}" target="_blank">{{ result.place4 }}</a>
+                    {% else %}
+                        {{ result.place4 }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if result.place5_iri %}
+                        <a href="{{ result.place5_iri }}" target="_blank">{{ result.place5 }}</a>
+                    {% else %}
+                        {{ result.place5 }}
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </table>

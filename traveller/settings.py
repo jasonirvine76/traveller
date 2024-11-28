@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "search_and_filter",
     "rdfstore",
     "package",
+    "destination",
 ]
 
 MIDDLEWARE = [
