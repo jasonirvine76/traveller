@@ -2,27 +2,24 @@ from django.shortcuts import render, HttpResponse
 from SPARQLWrapper import SPARQLWrapper, JSON
 from rdfstore.views import query_graphdb
 
-GRAPHDB_ENDPOINT = "http://localhost:7200/repositories/traveller"
-LOCAL_ENDPOINT = "http://127.0.0.1:8000/destination/"
-REMOTE_ENDPOINT = "http://tourism-2024.org/data/"
-
-def replace_base_url(iri):
-    return iri.replace(REMOTE_ENDPOINT, LOCAL_ENDPOINT) if iri else ""
-
 # Create your views here.
 def search_package(request):
     search_term = request.GET.get('search', '').lower()  
 
     sparql_query = f"""
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-        PREFIX data: <http://tourism-2024.org/data/>
-        PREFIX onto: <http://www.ontotext.com/>
+        PREFIX data: <http://localhost:7200/data/>
 
         SELECT 
             ?PKGID 
             ?firstPlaceID ?secondPlaceID ?thirdPlaceID ?fourthPlaceID ?fifthPlaceID 
-            ?Place1 ?Place2 ?Place3 ?Place4 ?Place5
+            ?Place1 ?Place2 ?Place3 ?Place4 ?Place5 ?location ?locationLabel
         WHERE {{
+            optional {{
+                ?PKGID data:location ?location .
+                ?location rdfs:label ?locationLabel
+            }}
+
             ?PKGID data:hasFirstPlace ?firstPlaceID .
             OPTIONAL {{?firstPlaceID rdfs:label ?firstPlaceLabel . }}
             BIND(COALESCE(?firstPlaceLabel, "") AS ?Place1)
@@ -59,19 +56,33 @@ def search_package(request):
     if results and "results" in results:
         for row in results["results"]["bindings"]:
             pkg_id = row["PKGID"]["value"].rsplit('/', 1)[-1]
-            result_list.append({
+            first_place_iri = row["firstPlaceID"]["value"]
+            second_place_iri = row["secondPlaceID"]["value"]
+            third_place_iri = row["thirdPlaceID"]["value"]
+            fourth_place_iri = row["fourthPlaceID"]["value"]
+            fifth_place_iri = row["fifthPlaceID"]["value"]
+            temp_dict = {
                 "package": pkg_id,
                 "place1": row["Place1"]["value"],
                 "place2": row["Place2"]["value"],
                 "place3": row["Place3"]["value"],
                 "place4": row["Place4"]["value"],
                 "place5": row["Place5"]["value"],
-                "place1_iri": replace_base_url(row["firstPlaceID"]["value"]),
-                "place2_iri": replace_base_url(row["secondPlaceID"]["value"]),
-                "place3_iri": replace_base_url(row["thirdPlaceID"]["value"]),
-                "place4_iri": replace_base_url(row["fourthPlaceID"]["value"]),
-                "place5_iri": replace_base_url(row["fifthPlaceID"]["value"]),
-            })
+                "place1_iri": first_place_iri,
+                "place2_iri": second_place_iri,
+                "place3_iri": third_place_iri,
+                "place4_iri": fourth_place_iri,
+                "place5_iri": fifth_place_iri,
+                "place1_code" : first_place_iri.rsplit('/', 1)[-1],
+                "place2_code" : second_place_iri.rsplit('/', 1)[-1],
+                "place3_code" : third_place_iri.rsplit('/', 1)[-1],
+                "place4_code" : fourth_place_iri.rsplit('/', 1)[-1],
+                "place5_code" : fifth_place_iri.rsplit('/', 1)[-1],
+            }
+            if "location" in row.keys():
+                temp_dict["location"] = row["locationLabel"]["value"]
+                temp_dict["location_iri"] = row["location"]["value"]
+            result_list.append(temp_dict)
     else:
         print("No results found or error in query execution.")
 
