@@ -62,7 +62,7 @@
             </div>
 
             <!-- Infobox -->
-            <div id="infobox" class="bg-white shadow-lg p-6 rounded-lg lg:col-span-1">
+            <div id="infobox" class="bg-white shadow-lg p-6 rounded-lg lg:col-span-1 max-h-96 overflow-y-auto">
                 <h3 class="text-xl font-semibold mb-4 text-blue-600 hover:underline cursor-pointer" id="infobox-title" onclick="redirectToDestination()"></h3>
                 <ul id="infobox-details" class="list-disc pl-4 text-gray-700"></ul>
             </div>
@@ -92,12 +92,13 @@
                 PREFIX data: <http://localhost:7200/data/>
 
                 SELECT 
-                    ?wst ?desc ?category
+                    ?wst ?desc ?category ?rating
                 WHERE {
                     ?wst a <https://www.wikidata.org/wiki/Q1200957> .
                     FILTER(?wst = <${placeIRI}>) .
                     OPTIONAL {?wst data:description ?desc .}
                     OPTIONAL {?wst data:category ?category .}
+                    OPTIONAL {?wst data:rating ?rating .}
                 }
             `;
             const url = endpoint + "?query=" + encodeURIComponent(query);
@@ -107,17 +108,25 @@
                 const response = await fetch(url, { headers });
                 const data = await response.json();
                 const bindings = data.results.bindings[0];
-                const description = bindings.desc.value.substring(0, 250) + "...";
+            
+                const description = bindings?.desc?.value
+                    ? bindings.desc.value.substring(0, 250) + "..."
+                    : "No description available.";
+                const category = bindings?.category?.value || "No category available.";
+                const rating = bindings?.rating?.value || "No rating available."
+            
                 document.getElementById('infobox-title').innerText = placeName;
                 document.getElementById('infobox-details').innerHTML = `
                     <li><strong>Description:</strong> ${description}</li>
-                    <li><strong>Category:</strong> ${bindings.category.value}</li>
+                    <li><strong>Category:</strong> ${category}</li>
+                    <li><strong>Rating:</strong> ${rating}</li>
                 `;
             } catch (error) {
                 document.getElementById('infobox-title').innerText = "Error";
                 document.getElementById('infobox-details').innerHTML = "<li>Unable to fetch place information.</li>";
                 console.error("Error fetching place info:", error);
             }
+
         }
 
         function redirectToDestination() {
