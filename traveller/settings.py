@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "rdfstore",
     "package",
     "destination",
+    "province", 
 ]
 
 MIDDLEWARE = [
