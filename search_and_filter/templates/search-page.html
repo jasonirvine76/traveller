@@ -72,12 +72,12 @@
                     <div class="p-4">
                         <h2 class="text-xl font-semibold text-blue-900">{{ result.name }}</h2>
                         <p class="text-gray-600 italic">{{ result.category }}</p>
-                        <p class="mt-2 text-gray-700">{{ result.city }}</p>
-                        <p class="mt-2 text-gray-700">{{ result.price }} IDR</p>
-                        <p class="mt-2 text-gray-700">{{ result.rating }}/5</p>
+                        <p class="mt-2 text-gray-700">Location: {{ result.city }}</p>
+                        <p class="mt-2 text-gray-700">Price: {{ result.price }} IDR</p>
+                        <p class="mt-2 text-gray-700">Rating: {{ result.rating }}/5</p>
                     </div>
                     <div class="bg-blue-900 text-white text-center py-2">
-                        <a href="{{ result.entity }}" class="text-white font-semibold hover:underline">View More</a>
+                        <a href="/destination/{{ result.id }}" class="text-white font-semibold hover:underline">View More</a>
                     </div>
                 </div>
                 {% endfor %}

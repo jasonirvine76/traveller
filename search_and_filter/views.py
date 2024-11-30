@@ -19,7 +19,7 @@ def search_from_desc(request):
                     data:price ?price ;
                     data:rating ?rating .
         
-        FILTER(CONTAINS(LCASE(?description), "{search_term}"))
+        FILTER(CONTAINS(LCASE(?description), "{search_term}") || CONTAINS(LCASE(?name), "{search_term}"))
     
     """
 
@@ -35,7 +35,7 @@ def search_from_desc(request):
     if results and "results" in results:
         for row in results["results"]["bindings"]:
             result_list.append({
-                "tourismArea": _get_value(row, "tourismArea"),
+                "id": _get_value(row, "tourismArea", lambda v: v.split("/")[-1]), # Extract after slash
                 "name": _get_value(row, "name"),
                 "description": _get_value(row, "description"),
                 "category": _get_value(row, "category"),
