@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search for Places</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-blue-900 text-white py-4">
+        <div class="container mx-auto flex items-center justify-between">
+            <h1 class="text-3xl font-bold">Destination Wiki</h1>
+            <nav class="space-x-4">
+                <a href="/" class="hover:underline">Home</a>
+                <a href="/destinations" class="hover:underline">All Destinations</a>
+                <a href="/about" class="hover:underline">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto my-8 px-4">
+        <h1 class="text-3xl font-bold mb-4">Search for Places</h1>
+
+        <!-- Search Form -->
+        <form method="get" action="" class="mb-6">
+            <div class="mb-4">
+                <input type="text" name="search" placeholder="Search..." value="{{ search_term }}" class="border p-2 rounded-md w-2/3">
+            </div>
+
+            <!-- Category Filters -->
+            <div class="mb-4">
+                <p class="font-semibold">Filter by Category</p>
+                <div class="space-y-2">
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" name="categories" value="Budaya" {% if 'Budaya' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
+                        <span class="ml-2">Budaya</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" name="categories" value="Taman Hiburan" {% if 'Taman Hiburan' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
+                        <span class="ml-2">Taman Hiburan</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" name="categories" value="Cagar Alam" {% if 'Cagar Alam' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
+                        <span class="ml-2">Cagar Alam</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" name="categories" value="Bahari" {% if 'Bahari' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
+                        <span class="ml-2">Bahari</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" name="categories" value="Pusat Perbelanjaan" {% if 'Pusat Perbelanjaan' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
+                        <span class="ml-2">Pusat Perbelanjaan</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" name="categories" value="Tempat Ibadah" {% if 'Tempat Ibadah' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
+                        <span class="ml-2">Tempat Ibadah</span>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="bg-blue-900 text-white px-4 py-2 rounded-md">Search</button>
+        </form>
+
+        <!-- Results -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% if results %}
+                {% for result in results %}
+                <div class="bg-white shadow-md rounded-md overflow-hidden">
+                    <div class="p-4">
+                        <h2 class="text-xl font-semibold text-blue-900">{{ result.name }}</h2>
+                        <p class="text-gray-600 italic">{{ result.category }}</p>
+                        <p class="mt-2 text-gray-700">{{ result.city }}</p>
+                        <p class="mt-2 text-gray-700">{{ result.price }} IDR</p>
+                        <p class="mt-2 text-gray-700">{{ result.rating }}/5</p>
+                    </div>
+                    <div class="bg-blue-900 text-white text-center py-2">
+                        <a href="{{ result.entity }}" class="text-white font-semibold hover:underline">View More</a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No results found for "{{ search_term }}".</p>
+            {% endif %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-blue-900 text-white py-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Destination Wiki. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
