@@ -4,6 +4,8 @@ from rdfstore.views import query_graphdb
 def search_from_desc(request):
     search_term = request.GET.get('search', '').lower()
     selected_categories = request.GET.getlist('categories')
+    from_price = request.GET.get('from_price')
+    to_price = request.GET.get('to_price')
     results = None
 
     sparql_query = f"""
@@ -26,6 +28,12 @@ def search_from_desc(request):
     if selected_categories:
         categories_filter = "FILTER (?category IN (" + ",".join([f'"{category}"' for category in selected_categories]) + "))"
         sparql_query += f"    {categories_filter}"
+
+    if from_price:
+        sparql_query += f"    FILTER (?price >= {from_price})\n"
+
+    if to_price:
+        sparql_query += f"    FILTER (?price <= {to_price})\n"
     
     sparql_query += "}"
 
@@ -49,7 +57,9 @@ def search_from_desc(request):
     return render(request, 'search-page.html', {
         'results': result_list,
         'search_term': search_term,
-        'selected_categories': selected_categories  
+        'selected_categories': selected_categories,
+        'from_price': from_price,
+        'to_price': to_price
     })
 
 def _get_value(row, key, transform=None):

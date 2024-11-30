@@ -24,45 +24,58 @@
     <main class="container mx-auto my-8 px-4">
         <h1 class="text-3xl font-bold mb-4">Search for Places</h1>
 
-        <!-- Search Form -->
         <form method="get" action="" class="mb-6">
-            <div class="mb-4">
-                <input type="text" name="search" placeholder="Search..." value="{{ search_term }}" class="border p-2 rounded-md w-2/3">
-            </div>
-
-            <!-- Category Filters -->
-            <div class="mb-4">
-                <p class="font-semibold">Filter by Category</p>
-                <div class="space-y-2">
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" name="categories" value="Budaya" {% if 'Budaya' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
-                        <span class="ml-2">Budaya</span>
-                    </label>
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" name="categories" value="Taman Hiburan" {% if 'Taman Hiburan' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
-                        <span class="ml-2">Taman Hiburan</span>
-                    </label>
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" name="categories" value="Cagar Alam" {% if 'Cagar Alam' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
-                        <span class="ml-2">Cagar Alam</span>
-                    </label>
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" name="categories" value="Bahari" {% if 'Bahari' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
-                        <span class="ml-2">Bahari</span>
-                    </label>
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" name="categories" value="Pusat Perbelanjaan" {% if 'Pusat Perbelanjaan' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
-                        <span class="ml-2">Pusat Perbelanjaan</span>
-                    </label>
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" name="categories" value="Tempat Ibadah" {% if 'Tempat Ibadah' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
-                        <span class="ml-2">Tempat Ibadah</span>
-                    </label>
+            <div class="mb-4 flex items-start space-x-8">
+                <!-- Search Bar -->
+                <div class="flex-1">
+                    <p class="font-semibold">Destination</p>
+                    <input type="text" name="search" placeholder="Search..." value="{{ search_term }}" class="border p-2 rounded-md w-full">
+                </div>
+        
+                <!-- Price Range -->
+                <div class="flex-1">
+                    <p class="font-semibold">Price Range (IDR)</p>
+                    <div class="flex space-x-4">
+                        <input type="number" name="from_price" placeholder="From" value="{{ from_price }}" class="border p-2 rounded-md w-1/2">
+                        <input type="number" name="to_price" placeholder="To" value="{{ to_price }}" class="border p-2 rounded-md w-1/2">
+                    </div>
+                </div>
+        
+                <!-- Category Filters -->
+                <div class="flex-1">
+                    <p class="font-semibold">Filter by Category</p>
+                    <div class="space-y-2">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="categories" value="Budaya" {% if 'Budaya' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
+                            <span class="ml-2">Budaya</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="categories" value="Taman Hiburan" {% if 'Taman Hiburan' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
+                            <span class="ml-2">Taman Hiburan</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="categories" value="Cagar Alam" {% if 'Cagar Alam' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
+                            <span class="ml-2">Cagar Alam</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="categories" value="Bahari" {% if 'Bahari' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
+                            <span class="ml-2">Bahari</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="categories" value="Pusat Perbelanjaan" {% if 'Pusat Perbelanjaan' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
+                            <span class="ml-2">Pusat Perbelanjaan</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="categories" value="Tempat Ibadah" {% if 'Tempat Ibadah' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
+                            <span class="ml-2">Tempat Ibadah</span>
+                        </label>
+                    </div>
                 </div>
             </div>
-
+        
             <button type="submit" class="bg-blue-900 text-white px-4 py-2 rounded-md">Search</button>
         </form>
+        
 
         <!-- Results -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
