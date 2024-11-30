@@ -19,5 +19,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('search/', include("search_and_filter.urls")),
-    path('rdfstore/', include("rdfstore.urls"))
+    path('rdfstore/', include("rdfstore.urls")),
+    path('package/', include("package.urls")),
+    path('destination/', include("destination.urls")),
 ]

@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "search_and_filter",
     "rdfstore",
+    "package",
+    "destination",
 ]
 
 MIDDLEWARE = [
