@@ -23,4 +23,5 @@ urlpatterns = [
     path('package/', include("package.urls")),
     path('destination/', include("destination.urls")),
     path('province/', include("province.urls")),
+    path('', include("homepage.urls")),
 ]
