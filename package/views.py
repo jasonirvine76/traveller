@@ -1,5 +1,4 @@
-from django.shortcuts import render, HttpResponse
-from SPARQLWrapper import SPARQLWrapper, JSON
+from django.shortcuts import render
 from rdfstore.views import query_graphdb
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
