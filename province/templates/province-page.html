@@ -1,24 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ destination.name }} - Destination Wiki</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 text-gray-800">
-    <!-- Header -->
-    <header class="bg-blue-900 text-white py-4">
-        <div class="container mx-auto flex items-center justify-between">
-            <h1 class="text-3xl font-bold">Province Wiki</h1>
-            <nav class="space-x-4">
-                <a href="/" class="hover:underline">Home</a>
-                <a href="/destinations" class="hover:underline">All Destinations</a>
-                <a href="/about" class="hover:underline">About</a>
-            </nav>
-        </div>
-    </header>
+{% extends "base.html" %}
 
+{% block content %}
     <!-- Main Content -->
     <main class="container mx-auto my-8 px-4">
         <div class="bg-white shadow-md rounded-md overflow-hidden">
@@ -99,25 +81,15 @@
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-blue-900 text-white py-4 mt-8">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 Destination Wiki. All rights reserved.</p>
-        </div>
-    </footer>
-
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const cityregList = document.getElementById("cityreg-list");
             const viewMoreButton = document.getElementById("view-more-button");
-    
-            // Data for all cities (loaded server-side into a JS array)
+
             const allCityRegs = {{ province_data.cityregs|safe }};
-    
-            // Show all items on "View More" click
+
             if (viewMoreButton) {
                 viewMoreButton.addEventListener("click", () => {
-                    // Append remaining items to the list
                     const additionalItems = allCityRegs.slice(5).map(cityreg => {
                         const li = document.createElement("li");
                         const a = document.createElement("a");
@@ -127,14 +99,13 @@
                         li.appendChild(a);
                         return li;
                     });
-    
+
                     additionalItems.forEach(item => cityregList.appendChild(item));
-    
-                    // Hide the "View More" button
+
                     viewMoreButton.style.display = "none";
                 });
             }
         });
     </script>
-</body>
-</html>
+
+{% endblock %}

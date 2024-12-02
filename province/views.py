@@ -19,7 +19,6 @@ def get_province_by_name(request, name):
         }}
     """
     results = query_graphdb(sparql_query)
-    # print(results)
 
     province_data = dict()
     external_link = None
@@ -55,7 +54,6 @@ def get_province_by_name(request, name):
         province_data['cityregs'] = list_of_cityreg
     else:
         print(f"No results found for Province name: {name}")
-    print(province_data)
     return render(request, 'province-page.html', {'province_data': province_data})
 
 def _extract_coordinate(point_str):
