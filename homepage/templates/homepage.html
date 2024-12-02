@@ -1,27 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Destination Wiki</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-
-<body class="bg-gray-100 text-gray-800">
-    <!-- Header -->
-    <header class="bg-blue-900 text-white py-6">
-        <div class="container mx-auto flex items-center justify-between">
-            <h1 class="text-4xl font-bold">Destination Wiki</h1>
-            <nav class="space-x-4">
-                <a href="/" class="hover:underline">Home</a>
-                <a href="/destinations" class="hover:underline">Destinations</a>
-                <a href="/about" class="hover:underline">About</a>
-                <a href="/contact" class="hover:underline">Contact</a>
-            </nav>
-        </div>
-    </header>
-
+{% block content %}
     <!-- Hero Section -->
     <section class="bg-blue-700 text-white text-center py-16">
         <div class="container mx-auto">
@@ -75,17 +54,4 @@
             </a>
         </div>
     </section>
-
-    <!-- Footer -->
-    <footer class="bg-blue-900 text-white py-6">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 Destination Wiki. All rights reserved.</p>
-            <nav class="space-x-4">
-                <a href="/privacy" class="hover:underline">Privacy Policy</a>
-                <a href="/terms" class="hover:underline">Terms of Service</a>
-            </nav>
-        </div>
-    </footer>
-</body>
-
-</html>
+{% endblock %}
