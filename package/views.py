@@ -1,6 +1,9 @@
 from django.shortcuts import render, HttpResponse
 from SPARQLWrapper import SPARQLWrapper, JSON
 from rdfstore.views import query_graphdb
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import requests
 
 # Create your views here.
 def search_package(request):
@@ -88,3 +91,38 @@ def search_package(request):
 
     print(result_list)
     return render(request, 'package_data.html', {'results': result_list, 'search_term': search_term})
+
+@csrf_exempt
+def fetch_rdf_data(request):
+    if request.method == "POST":
+        place_iri = request.POST.get("place_iri")
+        endpoint = "http://localhost:7200/repositories/traveller"
+        query = f"""
+            PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+            PREFIX data: <http://localhost:7200/data/>
+
+            SELECT ?wst ?desc ?category ?rating
+            WHERE {{
+                ?wst a <https://www.wikidata.org/wiki/Q1200957> .
+                FILTER(?wst = <{place_iri}>) .
+                OPTIONAL {{?wst data:description ?desc .}}
+                OPTIONAL {{?wst data:category ?category .}}
+                OPTIONAL {{?wst data:rating ?rating .}}
+            }}
+        """
+        headers = {"Accept": "application/sparql-results+json"}
+        response = requests.get(endpoint, params={"query": query}, headers=headers)
+
+        if response.status_code == 200:
+            rdf_data = response.json()
+            bindings = rdf_data.get("results", {}).get("bindings", [{}])[0]
+            return JsonResponse({
+                "description": bindings.get("desc", {}).get("value", "No description available."),
+                "category": bindings.get("category", {}).get("value", "No category available."),
+                "rating": bindings.get("rating", {}).get("value", "No rating available."),
+            })
+        else:
+            return JsonResponse({"error": "Failed to fetch data from RDF store."}, status=500)
+    else:
+        return JsonResponse({"error": "Invalid request method."}, status=405)

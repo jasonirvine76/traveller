@@ -1,25 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search for Places in Packages</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-
-<body class="bg-gray-100 text-gray-800">
-    <!-- Header -->
-    <header class="bg-blue-900 text-white py-6">
-        <div class="container mx-auto text-center">
-            <h1 class="text-4xl font-bold">Search for Places in Packages</h1>
-        </div>
-    </header>
-
+{% block content %}
     <!-- Main Content -->
     <main class="container mx-auto my-8 px-4">
-        <!-- Search Form -->
+        <!-- Search Section -->
         <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+            <!-- Centered Title -->
+            <h2 class="text-2xl font-bold text-center mb-4">Search Your Dream Package!</h2>
+            
+            <!-- Search Form -->
             <form method="get" action="" class="flex items-center justify-center space-x-4">
                 <input type="text" name="search" placeholder="Search..." value="{{ search_term }}" class="w-2/3 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-md">
@@ -72,70 +61,53 @@
         {% endif %}
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-blue-900 text-white py-4">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 Tourism Packages. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- JavaScript -->
     <script>
         let currentPlaceCode = null;
-
+    
         async function fetchPlaceInfo(placeName, placeIRI, placeCode) {
-            currentPlaceCode = placeCode; // Store the place code for redirection
-            const endpoint = "http://localhost:7200/repositories/traveller";
-            const query = `
-                PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-                PREFIX data: <http://localhost:7200/data/>
-
-                SELECT 
-                    ?wst ?desc ?category ?rating
-                WHERE {
-                    ?wst a <https://www.wikidata.org/wiki/Q1200957> .
-                    FILTER(?wst = <${placeIRI}>) .
-                    OPTIONAL {?wst data:description ?desc .}
-                    OPTIONAL {?wst data:category ?category .}
-                    OPTIONAL {?wst data:rating ?rating .}
-                }
-            `;
-            const url = endpoint + "?query=" + encodeURIComponent(query);
-            const headers = { "Accept": "application/sparql-results+json" };
-
+            currentPlaceCode = placeCode;
+            
             try {
-                const response = await fetch(url, { headers });
+                const response = await fetch("{% url 'fetch_rdf_data' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRFToken": "{{ csrf_token }}",
+                    },
+                    body: new URLSearchParams({
+                        "place_iri": placeIRI
+                    })
+                });
+    
                 const data = await response.json();
-                const bindings = data.results.bindings[0];
-            
-                const description = bindings?.desc?.value
-                    ? bindings.desc.value.substring(0, 250) + "..."
-                    : "No description available.";
-                const category = bindings?.category?.value || "No category available.";
-                const rating = bindings?.rating?.value || "No rating available."
-            
-                document.getElementById('infobox-title').innerText = placeName;
-                document.getElementById('infobox-details').innerHTML = `
-                    <li><strong>Description:</strong> ${description}</li>
-                    <li><strong>Category:</strong> ${category}</li>
-                    <li><strong>Rating:</strong> ${rating}</li>
-                `;
+    
+                if (response.ok) {
+                    const description = data.description.length > 250 
+                        ? data.description.substring(0, 250) + "..." 
+                        : data.description;
+                    document.getElementById('infobox-title').innerText = placeName;
+                    document.getElementById('infobox-details').innerHTML = `
+                        <li><strong>Description:</strong> ${description}</li>
+                        <li><strong>Category:</strong> ${data.category}</li>
+                        <li><strong>Rating:</strong> ${data.rating}</li>
+                    `;
+                } else {
+                    document.getElementById('infobox-title').innerText = "Error";
+                    document.getElementById('infobox-details').innerHTML = `<li>${data.error}</li>`;
+                }
             } catch (error) {
                 document.getElementById('infobox-title').innerText = "Error";
                 document.getElementById('infobox-details').innerHTML = "<li>Unable to fetch place information.</li>";
                 console.error("Error fetching place info:", error);
             }
-
         }
 
         function redirectToDestination() {
             if (currentPlaceCode) {
                 const destinationUrl = "{% url 'destination_detail' 'PLACE_CODE' %}".replace("PLACE_CODE", currentPlaceCode);
-                window.location.href = destinationUrl; // Redirect to the Django URL
+                window.location.href = destinationUrl;
             }
         }
     </script>
-</body>
-
-</html>
+    
+{% endblock %}
