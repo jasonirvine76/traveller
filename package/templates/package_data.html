@@ -31,7 +31,6 @@
                             <th class="p-4 text-left">Place 3</th>
                             <th class="p-4 text-left">Place 4</th>
                             <th class="p-4 text-left">Place 5</th>
-                            <th class="p-4 text-left">Location</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -43,7 +42,6 @@
                             <td class="p-4 cursor-pointer text-blue-600 hover:underline" onclick="fetchPlaceInfo('{{ result.place3 }}', '{{ result.place3_iri }}', '{{ result.place3_code }}')">{{ result.place3 }}</td>
                             <td class="p-4 cursor-pointer text-blue-600 hover:underline" onclick="fetchPlaceInfo('{{ result.place4 }}', '{{ result.place4_iri }}', '{{ result.place4_code }}')">{{ result.place4 }}</td>
                             <td class="p-4 cursor-pointer text-blue-600 hover:underline" onclick="fetchPlaceInfo('{{ result.place5 }}', '{{ result.place5_iri }}', '{{ result.place5_code }}')">{{ result.place5 }}</td>
-                            <td class="p-4 cursor-pointer text-blue-600 hover:underline">{{ result.location }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -90,6 +88,7 @@
                         <li><strong>Description:</strong> ${description}</li>
                         <li><strong>Category:</strong> ${data.category}</li>
                         <li><strong>Rating:</strong> ${data.rating}</li>
+                        <li><strong>City:</strong> ${data.cityLabel}</li>
                     `;
                 } else {
                     document.getElementById('infobox-title').innerText = "Error";

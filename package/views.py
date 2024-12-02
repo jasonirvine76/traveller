@@ -89,7 +89,6 @@ def search_package(request):
     else:
         print("No results found or error in query execution.")
 
-    print(result_list)
     return render(request, 'package_data.html', {'results': result_list, 'search_term': search_term})
 
 @csrf_exempt
@@ -102,13 +101,17 @@ def fetch_rdf_data(request):
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             PREFIX data: <http://localhost:7200/data/>
 
-            SELECT ?wst ?desc ?category ?rating
+            SELECT ?wst ?desc ?category ?rating ?cityLabel
             WHERE {{
                 ?wst a <https://www.wikidata.org/wiki/Q1200957> .
                 FILTER(?wst = <{place_iri}>) .
                 OPTIONAL {{?wst data:description ?desc .}}
                 OPTIONAL {{?wst data:category ?category .}}
                 OPTIONAL {{?wst data:rating ?rating .}}
+                OPTIONAL {{
+                    ?wst data:atCity ?city .
+                    ?city rdfs:label ?cityLabel .
+                    }}
             }}
         """
         headers = {"Accept": "application/sparql-results+json"}
@@ -121,6 +124,7 @@ def fetch_rdf_data(request):
                 "description": bindings.get("desc", {}).get("value", "No description available."),
                 "category": bindings.get("category", {}).get("value", "No category available."),
                 "rating": bindings.get("rating", {}).get("value", "No rating available."),
+                "cityLabel": bindings.get("cityLabel", {}).get("value", "No city available."),
             })
         else:
             return JsonResponse({"error": "Failed to fetch data from RDF store."}, status=500)
