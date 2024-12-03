@@ -4,7 +4,7 @@
     <!-- Hero Section -->
     <section class="bg-blue-700 text-white text-center py-16">
         <div class="container mx-auto">
-            <h2 class="text-5xl font-bold mb-4">Explore the Indonesia's Best Destinations</h2>
+            <h2 class="text-5xl font-bold mb-4">Explore Indonesia's Best Destinations</h2>
             <p class="text-lg mb-6">Discover hidden gems, iconic landmarks, and breathtaking landscapes.</p>
             <a href="/search/" class="bg-white text-blue-700 font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-gray-100">
                 Start Exploring
@@ -16,31 +16,20 @@
     <section class="container mx-auto my-16 px-4">
         <h3 class="text-3xl font-bold text-center mb-8">Featured Destinations</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Example destination cards -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://via.placeholder.com/400x200" alt="Destination 1" class="w-full">
-                <div class="p-4">
-                    <h4 class="text-xl font-bold mb-2">Destination 1</h4>
-                    <p class="text-gray-600">A brief description of Destination 1.</p>
-                    <a href="/destinations/destination-1" class="text-blue-600 hover:underline mt-2 block">Learn More</a>
+            {% for destination in destinations %}
+            <a href="{{ destination.iri }}" class="block">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden transform transition-transform hover:scale-105">
+                    <img 
+                        src="{{ destination.image|default:'https://www.imf.org/-/media/Images/IMF/News/news-article-images/2020/CF-570x312-Tourism-Preto-perola-Getty-Images-iStock-1011241694.ashx?mh=304&la=en&h=304&w=556&mw=561' }}" 
+                        class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h4 class="text-xl font-bold mb-2">{{ destination.label }}</h4>
+                        <p class="text-gray-600">{{ destination.description|truncatewords:15 }}</p>
+                        <p class="text-yellow-500 font-semibold">Rating: {{ destination.rating }}</p>
+                    </div>
                 </div>
-            </div>
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://via.placeholder.com/400x200" alt="Destination 2" class="w-full">
-                <div class="p-4">
-                    <h4 class="text-xl font-bold mb-2">Destination 2</h4>
-                    <p class="text-gray-600">A brief description of Destination 2.</p>
-                    <a href="/destinations/destination-2" class="text-blue-600 hover:underline mt-2 block">Learn More</a>
-                </div>
-            </div>
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://via.placeholder.com/400x200" alt="Destination 3" class="w-full">
-                <div class="p-4">
-                    <h4 class="text-xl font-bold mb-2">Destination 3</h4>
-                    <p class="text-gray-600">A brief description of Destination 3.</p>
-                    <a href="/destinations/destination-3" class="text-blue-600 hover:underline mt-2 block">Learn More</a>
-                </div>
-            </div>
+            </a>
+            {% endfor %}
         </div>
     </section>
 
