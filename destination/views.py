@@ -5,7 +5,7 @@ from rdfstore.views import query_graphdb
 
 def get_destination_by_id(request, id):
     sparql_query = f"""
-    PREFIX data: <http://tourism-2024.org/data/>
+    PREFIX data: <http://localhost:7200/data/>
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
@@ -63,11 +63,10 @@ def get_destination_by_id(request, id):
                 "official_website":wikidata_data.get("official_website") if wikidata_data else None,
             }
 
-            # Extract user ratings and optional user details
             for binding in bindings:
                 user = binding.get("user", {}).get("value", "-").split("/")[-1]
                 user_rating = binding.get("userRating", {}).get("value", "-")
-                user_from = binding.get("userFrom", {}).get("value", "-")
+                user_from = binding.get("userFrom", {}).get("value", "-").split("/")[-1]  
                 user_age = binding.get("userAge", {}).get("value", "-")
                 user_id = binding.get("userId", {}).get("value", "-")
 
@@ -75,7 +74,7 @@ def get_destination_by_id(request, id):
                     user_ratings.append({
                         "user": user,
                         "rating": user_rating,
-                        "from": user_from,
+                        "from": user_from,  
                         "age": user_age,
                         "id": user_id,
                     })

@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     "package",
     "destination",
     "province",
-    'homepage'
+    'homepage',
+    "regency",
 ]
 
 MIDDLEWARE = [
