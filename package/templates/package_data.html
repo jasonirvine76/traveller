@@ -21,11 +21,11 @@
         {% if results %}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <!-- Results Cards -->
-            <div class="lg:col-span-2 space-y-4">
+            <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {% for result in results %}
-                <div class="bg-white shadow-md rounded-lg p-6 border border-gray-200 hover:shadow-lg transition-shadow">
+                <div class="flex flex-col bg-white shadow-md rounded-lg p-6 border border-gray-200 hover:shadow-lg transition-shadow">
                     <h3 class="text-xl font-bold text-blue-600 mb-4">{{ result.package }}</h3>
-                    <ul class="space-y-2">
+                    <ul class="space-y-2 flex-grow">
                         {% if result.place1 %}
                         <li class="text-gray-800 font-medium cursor-pointer text-blue-600 hover:underline"
                             onclick="fetchPlaceInfo('{{ result.place1 }}', '{{ result.place1_iri }}', '{{ result.place1_code }}')">
@@ -56,16 +56,22 @@
                             {{ result.place5 }}
                         </li>
                         {% endif %}
-                        {% if result.total_price %}
-                        <div class="text-lg font-semibold text-gray-800 mb-4">
-                            Total Price: <span class="text-green-600">{{ result.total_price|floatformat:2 }} IDR</span>
-                        </div>
+                    </ul>
+                    <hr class="my-4 border-t border-gray-300">
+                    {% if result.total_price is not None %}
+                    <div class="text-lg font-semibold text-gray-800 mt-4 text-center">
+                        Total Price: 
+                        {% if result.total_price > 0 %}
+                            <span class="text-green-600">{{ result.total_price }} IDR / Person</span>
                         {% else %}
-                        <div class="text-lg font-semibold text-gray-800 mb-4">
+                            <span class="text-green-600">0 IDR / Person</span>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                        <div class="text-lg font-semibold text-gray-800 mt-4 text-center">
                             Total Price: <span class="text-red-600">Not Available</span>
                         </div>
-                        {% endif %}
-                    </ul>
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>
