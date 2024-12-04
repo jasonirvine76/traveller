@@ -55,6 +55,16 @@
                     <h3 class="text-xl font-semibold mb-4 text-center">{{ destination.name }}</h3>
                     <table class="table-auto w-full text-sm">
                         <tbody>
+                            {% if destination.image %}
+                            <tr>
+                                <td colspan="2">
+                                    <div class="flex justify-center mb-8">
+                                        <img src="{{ destination.image }}" alt="{{ destination.name }}" 
+                                             class="max-w-full min-h-32 max-h-64 w-auto h-auto rounded-md">
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endif %}
                             <tr>
                                 <td class="font-medium">Name:</td>
                                 <td>{{ destination.name }}</td>
@@ -76,6 +86,14 @@
                                 <td>{{ destination.rating }}/5</td>
                             </tr>
                             <tr>
+                                <td class="font-medium">Address:</td>
+                                {% if destination.alamat != "-" %}
+                                <td>{{destination.alamat}}</td>
+                                {% else %}
+                                <td>Not Available</td>
+                                {% endif %}
+                            </tr>
+                            <tr>
                                 <td class="font-medium">Time Spent:</td>
                                 <td>
                                 {% if destination.timeSpent != "-" %}
@@ -93,11 +111,51 @@
                                 <td class="font-medium">Longitude:</td>
                                 <td>{{ destination.longitude }}</td>
                             </tr>
+                            {% if destination.official_website %}
+                            <tr>
+                                <td class="font-medium">Official Website:</td>
+                                <td>
+                                    <a href="{{ destination.official_website }}" target="_blank" class="text-blue-600 hover:underline">
+                                        Visit Official Website
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endif %}
                         </tbody>
                     </table>
                 </aside>
             </div>
         </div>
+        <div class="mt-8">
+            <h2 class="text-xl font-bold mb-4">User Ratings</h2>
+        
+            {% if user_ratings %}
+                <div class="space-y-6">
+                    {% for rating in user_ratings %}
+                        <div class="p-4 bg-gray-100 rounded-lg shadow">
+                            <div class="flex items-center space-x-4 mb-2">
+                                <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-sm font-bold">
+                                    {{ rating.user|slice:":1" }}
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-lg">{{ rating.user }}</h3>
+                                    <p class="text-sm text-gray-500">
+                                        From: {{ rating.from}} |
+                                        Age: {{ rating.age }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="text-gray-700">
+                                <p><span class="font-medium">Rating:</span> {{ rating.rating }}/5</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-500">No user ratings or comments available for this destination.</p>
+            {% endif %}
+        </div>
+        
     </main>
 
     <!-- Footer -->
