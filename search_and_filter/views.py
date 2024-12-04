@@ -13,7 +13,7 @@ def search_from_desc(request):
     results = None
 
     sparql_query = f"""
-    PREFIX data: <http://tourism-2024.org/data/>
+    PREFIX data: <http://localhost:7200/data/>
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
     SELECT ?tourismArea ?name ?category ?city ?price ?rating

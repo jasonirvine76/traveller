@@ -1,25 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search for Places</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 text-gray-800">
+{% extends "base.html" %}
 
-    <!-- Header -->
-    <header class="bg-blue-900 text-white py-4">
-        <div class="container mx-auto flex items-center justify-between">
-            <h1 class="text-3xl font-bold">Destination Wiki</h1>
-            <nav class="space-x-4">
-                <a href="/" class="hover:underline">Home</a>
-                <a href="/destinations" class="hover:underline">All Destinations</a>
-                <a href="/about" class="hover:underline">About</a>
-            </nav>
-        </div>
-    </header>
-
+{% block content %}
     <!-- Main Content -->
     <main class="container mx-auto my-8 px-4">
         <h1 class="text-3xl font-bold mb-4">Search for Places</h1>
@@ -120,6 +101,9 @@
             {% if results %}
                 {% for result in results %}
                 <div class="bg-white shadow-md rounded-md overflow-hidden">
+                    <img 
+                    src="{{'https://www.imf.org/-/media/Images/IMF/News/news-article-images/2020/CF-570x312-Tourism-Preto-perola-Getty-Images-iStock-1011241694.ashx?mh=304&la=en&h=304&w=556&mw=561' }}" 
+                    class="w-full h-48 object-cover">
                     <div class="p-4">
                         <h2 class="text-xl font-semibold text-blue-900">{{ result.name }}</h2>
                         <p class="text-gray-600 italic">{{ result.category }}</p>
@@ -138,12 +122,4 @@
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-blue-900 text-white py-4 mt-8">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 Destination Wiki. All rights reserved.</p>
-        </div>
-    </footer>
-
-</body>
-</html>
+{% endblock %}
