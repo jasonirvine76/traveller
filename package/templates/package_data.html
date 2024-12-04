@@ -20,32 +20,54 @@
         <!-- Results and Infobox Layout -->
         {% if results %}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <!-- Results Table -->
-            <div class="lg:col-span-2 overflow-x-auto">
-                <table class="w-full table-auto bg-white shadow-md rounded-lg">
-                    <thead class="bg-blue-600 text-white">
-                        <tr>
-                            <th class="p-4 text-left">Package ID</th>
-                            <th class="p-4 text-left">Place 1</th>
-                            <th class="p-4 text-left">Place 2</th>
-                            <th class="p-4 text-left">Place 3</th>
-                            <th class="p-4 text-left">Place 4</th>
-                            <th class="p-4 text-left">Place 5</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for result in results %}
-                        <tr class="odd:bg-gray-100 even:bg-gray-50 hover:bg-gray-200">
-                            <td class="p-4">{{ result.package }}</td>
-                            <td class="p-4 cursor-pointer text-blue-600 hover:underline" onclick="fetchPlaceInfo('{{ result.place1 }}', '{{ result.place1_iri }}', '{{ result.place1_code }}')">{{ result.place1 }}</td>
-                            <td class="p-4 cursor-pointer text-blue-600 hover:underline" onclick="fetchPlaceInfo('{{ result.place2 }}', '{{ result.place2_iri }}', '{{ result.place2_code }}')">{{ result.place2 }}</td>
-                            <td class="p-4 cursor-pointer text-blue-600 hover:underline" onclick="fetchPlaceInfo('{{ result.place3 }}', '{{ result.place3_iri }}', '{{ result.place3_code }}')">{{ result.place3 }}</td>
-                            <td class="p-4 cursor-pointer text-blue-600 hover:underline" onclick="fetchPlaceInfo('{{ result.place4 }}', '{{ result.place4_iri }}', '{{ result.place4_code }}')">{{ result.place4 }}</td>
-                            <td class="p-4 cursor-pointer text-blue-600 hover:underline" onclick="fetchPlaceInfo('{{ result.place5 }}', '{{ result.place5_iri }}', '{{ result.place5_code }}')">{{ result.place5 }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <!-- Results Cards -->
+            <div class="lg:col-span-2 space-y-4">
+                {% for result in results %}
+                <div class="bg-white shadow-md rounded-lg p-6 border border-gray-200 hover:shadow-lg transition-shadow">
+                    <h3 class="text-xl font-bold text-blue-600 mb-4">{{ result.package }}</h3>
+                    <ul class="space-y-2">
+                        {% if result.place1 %}
+                        <li class="text-gray-800 font-medium cursor-pointer text-blue-600 hover:underline"
+                            onclick="fetchPlaceInfo('{{ result.place1 }}', '{{ result.place1_iri }}', '{{ result.place1_code }}')">
+                            {{ result.place1 }}
+                        </li>
+                        {% endif %}
+                        {% if result.place2 %}
+                        <li class="text-gray-800 font-medium cursor-pointer text-blue-600 hover:underline"
+                            onclick="fetchPlaceInfo('{{ result.place2 }}', '{{ result.place2_iri }}', '{{ result.place2_code }}')">
+                            {{ result.place2 }}
+                        </li>
+                        {% endif %}
+                        {% if result.place3 %}
+                        <li class="text-gray-800 font-medium cursor-pointer text-blue-600 hover:underline"
+                            onclick="fetchPlaceInfo('{{ result.place3 }}', '{{ result.place3_iri }}', '{{ result.place3_code }}')">
+                            {{ result.place3 }}
+                        </li>
+                        {% endif %}
+                        {% if result.place4 %}
+                        <li class="text-gray-800 font-medium cursor-pointer text-blue-600 hover:underline"
+                            onclick="fetchPlaceInfo('{{ result.place4 }}', '{{ result.place4_iri }}', '{{ result.place4_code }}')">
+                            {{ result.place4 }}
+                        </li>
+                        {% endif %}
+                        {% if result.place5 %}
+                        <li class="text-gray-800 font-medium cursor-pointer text-blue-600 hover:underline"
+                            onclick="fetchPlaceInfo('{{ result.place5 }}', '{{ result.place5_iri }}', '{{ result.place5_code }}')">
+                            {{ result.place5 }}
+                        </li>
+                        {% endif %}
+                        {% if result.total_price %}
+                        <div class="text-lg font-semibold text-gray-800 mb-4">
+                            Total Price: <span class="text-green-600">{{ result.total_price|floatformat:2 }} IDR</span>
+                        </div>
+                        {% else %}
+                        <div class="text-lg font-semibold text-gray-800 mb-4">
+                            Total Price: <span class="text-red-600">Not Available</span>
+                        </div>
+                        {% endif %}
+                    </ul>
+                </div>
+                {% endfor %}
             </div>
 
             <!-- Infobox -->
@@ -108,5 +130,4 @@
             }
         }
     </script>
-    
 {% endblock %}
