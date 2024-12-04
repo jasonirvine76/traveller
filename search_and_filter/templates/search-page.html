@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <!-- Main Content -->
+    <main class="container mx-auto my-8 px-4">
+        <h1 class="text-3xl font-bold mb-4">Search for Places</h1>
+
+        <form method="get" action="" class="mb-6">
+            <div class="mb-4 flex items-start space-x-8">
+                <!-- Search Bar -->
+                <div class="flex-1">
+                    <p class="font-semibold">Destination</p>
+                    <input type="text" name="search" placeholder="Search..." value="{{ search_term }}" class="border p-2 rounded-md w-full">
+                </div>
+        
+                <!-- Price Range -->
+                <div class="flex-1">
+                    <p class="font-semibold">Price Range (IDR)</p>
+                    <div class="flex space-x-4">
+                        <input type="number" name="from_price" placeholder="From" value="{{ from_price }}" class="border p-2 rounded-md w-1/2">
+                        <input type="number" name="to_price" placeholder="To" value="{{ to_price }}" class="border p-2 rounded-md w-1/2">
+                    </div>
+                </div>
+        
+                <!-- Category Filters -->
+                <div class="flex-1">
+                    <p class="font-semibold">Filter by Category</p>
+                    <div class="space-y-2">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="categories" value="Budaya" {% if 'Budaya' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
+                            <span class="ml-2">Budaya</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="categories" value="Taman Hiburan" {% if 'Taman Hiburan' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
+                            <span class="ml-2">Taman Hiburan</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="categories" value="Cagar Alam" {% if 'Cagar Alam' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
+                            <span class="ml-2">Cagar Alam</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="categories" value="Bahari" {% if 'Bahari' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
+                            <span class="ml-2">Bahari</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="categories" value="Pusat Perbelanjaan" {% if 'Pusat Perbelanjaan' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
+                            <span class="ml-2">Pusat Perbelanjaan</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="categories" value="Tempat Ibadah" {% if 'Tempat Ibadah' in selected_categories %}checked{% endif %} class="form-checkbox text-blue-900">
+                            <span class="ml-2">Tempat Ibadah</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+
+        <!-- Sort By -->
+        <div class="flex-1">
+            <div class="flex space-x-4">
+                <!-- Sort By Name -->
+                <div class="w-1/3">
+                    <p class="text-sm text-gray-600 mb-2">Sort by Name</p>
+                    <select name="sort_name" class="border p-2 rounded-md w-full">
+                        <option value="" {% if not sort_name %}selected{% endif %}>Name</option>
+                        <option value="asc" {% if sort_name == 'asc' %}selected{% endif %}>A-Z</option>
+                        <option value="desc" {% if sort_name == 'desc' %}selected{% endif %}>Z-A</option>
+                    </select>
+                </div>
+
+                <!-- Sort By Price -->
+                <div class="w-1/3">
+                    <p class="text-sm text-gray-600 mb-2">Sort by Price</p>
+                    <select name="sort_price" class="border p-2 rounded-md w-full">
+                        <option value="" {% if not sort_price %}selected{% endif %}>Price</option>
+                        <option value="asc" {% if sort_price == 'asc' %}selected{% endif %}>Low to High</option>
+                        <option value="desc" {% if sort_price == 'desc' %}selected{% endif %}>High to Low</option>
+                    </select>
+                </div>
+
+                <!-- Sort By Rating -->
+                <div class="w-1/3">
+                    <p class="text-sm text-gray-600 mb-2">Sort by Rating</p>
+                    <select name="sort_rating" class="border p-2 rounded-md w-full">
+                        <option value="" {% if not sort_rating %}selected{% endif %}>Rating</option>
+                        <option value="asc" {% if sort_rating == 'asc' %}selected{% endif %}>Low to High</option>
+                        <option value="desc" {% if sort_rating == 'desc' %}selected{% endif %}>High to Low</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        
+            <button type="submit" class="bg-blue-900 text-white px-4 py-2 rounded-md mt-6">Search</button>
+
+        </form>
+        
+
+        <!-- Results -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% if results %}
+                {% for result in results %}
+                <div class="bg-white shadow-md rounded-md overflow-hidden">
+                    <img 
+                    src="{{'https://www.imf.org/-/media/Images/IMF/News/news-article-images/2020/CF-570x312-Tourism-Preto-perola-Getty-Images-iStock-1011241694.ashx?mh=304&la=en&h=304&w=556&mw=561' }}" 
+                    class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h2 class="text-xl font-semibold text-blue-900">{{ result.name }}</h2>
+                        <p class="text-gray-600 italic">{{ result.category }}</p>
+                        <p class="mt-2 text-gray-700">Location: {{ result.city }}</p>
+                        <p class="mt-2 text-gray-700">Price: {{ result.price }} IDR</p>
+                        <p class="mt-2 text-gray-700">Rating: {{ result.rating }}/5</p>
+                    </div>
+                    <div class="bg-blue-900 text-white text-center py-2">
+                        <a href="/destination/{{ result.id }}" class="text-white font-semibold hover:underline">View More</a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No results found for "{{ search_term }}".</p>
+            {% endif %}
+        </div>
+    </main>
+
+{% endblock %}
