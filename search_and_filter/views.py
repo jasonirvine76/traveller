@@ -6,6 +6,10 @@ def search_from_desc(request):
     selected_categories = request.GET.getlist('categories')
     from_price = request.GET.get('from_price')
     to_price = request.GET.get('to_price')
+    sort_name = request.GET.get('sort_name')
+    sort_rating = request.GET.get('sort_rating')
+    sort_price = request.GET.get('sort_price')
+
     results = None
 
     sparql_query = f"""
@@ -34,8 +38,19 @@ def search_from_desc(request):
 
     if to_price:
         sparql_query += f"    FILTER (?price <= {to_price})\n"
-    
+
     sparql_query += "}"
+
+    if sort_name or sort_rating or sort_price:
+        sparql_query += "ORDER BY"
+        if sort_name:
+            sparql_query += f"{'ASC' if sort_name == 'asc' else 'DESC'}(?name)\n"
+
+        if sort_price:
+            sparql_query += f"{'ASC' if sort_price == 'asc' else 'DESC'}(?price)\n"
+
+        if sort_rating:
+            sparql_query += f"{'ASC' if sort_rating == 'asc' else 'DESC'}(?rating)\n"
 
     results = query_graphdb(sparql_query)
 
@@ -59,7 +74,10 @@ def search_from_desc(request):
         'search_term': search_term,
         'selected_categories': selected_categories,
         'from_price': from_price,
-        'to_price': to_price
+        'to_price': to_price,
+        'sort_name': sort_name,
+        'sort_rating': sort_rating,
+        'sort_price': sort_price
     })
 
 def _get_value(row, key, transform=None):

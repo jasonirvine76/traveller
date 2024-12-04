@@ -72,8 +72,46 @@
                     </div>
                 </div>
             </div>
+
+
+        <!-- Sort By -->
+        <div class="flex-1">
+            <div class="flex space-x-4">
+                <!-- Sort By Name -->
+                <div class="w-1/3">
+                    <p class="text-sm text-gray-600 mb-2">Sort by Name</p>
+                    <select name="sort_name" class="border p-2 rounded-md w-full">
+                        <option value="" {% if not sort_name %}selected{% endif %}>Name</option>
+                        <option value="asc" {% if sort_name == 'asc' %}selected{% endif %}>A-Z</option>
+                        <option value="desc" {% if sort_name == 'desc' %}selected{% endif %}>Z-A</option>
+                    </select>
+                </div>
+
+                <!-- Sort By Price -->
+                <div class="w-1/3">
+                    <p class="text-sm text-gray-600 mb-2">Sort by Price</p>
+                    <select name="sort_price" class="border p-2 rounded-md w-full">
+                        <option value="" {% if not sort_price %}selected{% endif %}>Price</option>
+                        <option value="asc" {% if sort_price == 'asc' %}selected{% endif %}>Low to High</option>
+                        <option value="desc" {% if sort_price == 'desc' %}selected{% endif %}>High to Low</option>
+                    </select>
+                </div>
+
+                <!-- Sort By Rating -->
+                <div class="w-1/3">
+                    <p class="text-sm text-gray-600 mb-2">Sort by Rating</p>
+                    <select name="sort_rating" class="border p-2 rounded-md w-full">
+                        <option value="" {% if not sort_rating %}selected{% endif %}>Rating</option>
+                        <option value="asc" {% if sort_rating == 'asc' %}selected{% endif %}>Low to High</option>
+                        <option value="desc" {% if sort_rating == 'desc' %}selected{% endif %}>High to Low</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
         
-            <button type="submit" class="bg-blue-900 text-white px-4 py-2 rounded-md">Search</button>
+            <button type="submit" class="bg-blue-900 text-white px-4 py-2 rounded-md mt-6">Search</button>
+
         </form>
         
 
