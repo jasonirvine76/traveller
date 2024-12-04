@@ -1,39 +1,139 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Search</title>
-</head>
-<body>
-    <h1>Search for Places in Packages</h1>
+{% extends "base.html" %}
 
-    <form method="get" action="">
-        <input type="text" name="search" placeholder="Search..." value="{{ search_term }}">
-        <button type="submit">Search</button>
-    </form>
+{% block content %}
+    <!-- Main Content -->
+    <main class="container mx-auto my-8 px-4">
+        <!-- Search Section -->
+        <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+            <!-- Centered Title -->
+            <h2 class="text-2xl font-bold text-center mb-4">Search Your Dream Package!</h2>
+            
+            <!-- Search Form -->
+            <form method="get" action="" class="flex items-center justify-center space-x-4">
+                <input type="text" name="search" placeholder="Search..." value="{{ search_term }}" class="w-2/3 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-md">
+                    Search
+                </button>
+            </form>
+        </div>
 
-    {% if results %}
-        <table border="1">
-            <tr>
-                <th>Package ID</th>
-                <th>Place 1</th>
-                <th>Place 2</th>
-                <th>Place 3</th>
-                <th>Place 4</th>
-                <th>Place 5</th>
-            </tr>
-            {% for result in results %}
-            <tr>
-                <td>{{ result.package }}</td>
-                <td>{{ result.place1 }}</td>
-                <td>{{ result.place2 }}</td>
-                <td>{{ result.place3 }}</td>
-                <td>{{ result.place4 }}</td>
-                <td>{{ result.place5 }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>No results found for "{{ search_term }}".</p>
-    {% endif %}
-</body>
-</html>
+        <!-- Results and Infobox Layout -->
+        {% if results %}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <!-- Results Cards -->
+            <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for result in results %}
+                <div class="flex flex-col bg-white shadow-md rounded-lg p-6 border border-gray-200 hover:shadow-lg transition-shadow">
+                    <h3 class="text-xl font-bold text-blue-600 mb-4">{{ result.package }}</h3>
+                    <ul class="space-y-2 flex-grow">
+                        {% if result.place1 %}
+                        <li class="text-gray-800 font-medium cursor-pointer text-blue-600 hover:underline"
+                            onclick="fetchPlaceInfo('{{ result.place1 }}', '{{ result.place1_iri }}', '{{ result.place1_code }}')">
+                            {{ result.place1 }}
+                        </li>
+                        {% endif %}
+                        {% if result.place2 %}
+                        <li class="text-gray-800 font-medium cursor-pointer text-blue-600 hover:underline"
+                            onclick="fetchPlaceInfo('{{ result.place2 }}', '{{ result.place2_iri }}', '{{ result.place2_code }}')">
+                            {{ result.place2 }}
+                        </li>
+                        {% endif %}
+                        {% if result.place3 %}
+                        <li class="text-gray-800 font-medium cursor-pointer text-blue-600 hover:underline"
+                            onclick="fetchPlaceInfo('{{ result.place3 }}', '{{ result.place3_iri }}', '{{ result.place3_code }}')">
+                            {{ result.place3 }}
+                        </li>
+                        {% endif %}
+                        {% if result.place4 %}
+                        <li class="text-gray-800 font-medium cursor-pointer text-blue-600 hover:underline"
+                            onclick="fetchPlaceInfo('{{ result.place4 }}', '{{ result.place4_iri }}', '{{ result.place4_code }}')">
+                            {{ result.place4 }}
+                        </li>
+                        {% endif %}
+                        {% if result.place5 %}
+                        <li class="text-gray-800 font-medium cursor-pointer text-blue-600 hover:underline"
+                            onclick="fetchPlaceInfo('{{ result.place5 }}', '{{ result.place5_iri }}', '{{ result.place5_code }}')">
+                            {{ result.place5 }}
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <hr class="my-4 border-t border-gray-300">
+                    {% if result.total_price is not None %}
+                    <div class="text-lg font-semibold text-gray-800 mt-4 text-center">
+                        Total Price: 
+                        {% if result.total_price > 0 %}
+                            <span class="text-green-600">{{ result.total_price }} IDR / Person</span>
+                        {% else %}
+                            <span class="text-green-600">0 IDR / Person</span>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                        <div class="text-lg font-semibold text-gray-800 mt-4 text-center">
+                            Total Price: <span class="text-red-600">Not Available</span>
+                        </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Infobox -->
+            <div id="infobox" class="bg-white shadow-lg p-6 rounded-lg lg:col-span-1 max-h-96 overflow-y-auto">
+                <h3 class="text-xl font-semibold mb-4 text-blue-600 hover:underline cursor-pointer" id="infobox-title" onclick="redirectToDestination()"></h3>
+                <ul id="infobox-details" class="list-disc pl-4 text-gray-700"></ul>
+            </div>
+        </div>
+        {% else %}
+        <p class="text-center text-gray-600">No results found for "{{ search_term }}".</p>
+        {% endif %}
+    </main>
+
+    <script>
+        let currentPlaceCode = null;
+    
+        async function fetchPlaceInfo(placeName, placeIRI, placeCode) {
+            currentPlaceCode = placeCode;
+            
+            try {
+                const response = await fetch("{% url 'fetch_rdf_data' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRFToken": "{{ csrf_token }}",
+                    },
+                    body: new URLSearchParams({
+                        "place_iri": placeIRI
+                    })
+                });
+    
+                const data = await response.json();
+    
+                if (response.ok) {
+                    const description = data.description.length > 250 
+                        ? data.description.substring(0, 250) + "..." 
+                        : data.description;
+                    document.getElementById('infobox-title').innerText = placeName;
+                    document.getElementById('infobox-details').innerHTML = `
+                        <li><strong>Description:</strong> ${description}</li>
+                        <li><strong>Category:</strong> ${data.category}</li>
+                        <li><strong>Rating:</strong> ${data.rating}</li>
+                        <li><strong>City:</strong> ${data.cityLabel}</li>
+                    `;
+                } else {
+                    document.getElementById('infobox-title').innerText = "Error";
+                    document.getElementById('infobox-details').innerHTML = `<li>${data.error}</li>`;
+                }
+            } catch (error) {
+                document.getElementById('infobox-title').innerText = "Error";
+                document.getElementById('infobox-details').innerHTML = "<li>Unable to fetch place information.</li>";
+                console.error("Error fetching place info:", error);
+            }
+        }
+
+        function redirectToDestination() {
+            if (currentPlaceCode) {
+                const destinationUrl = "{% url 'destination_detail' 'PLACE_CODE' %}".replace("PLACE_CODE", currentPlaceCode);
+                window.location.href = destinationUrl;
+            }
+        }
+    </script>
+{% endblock %}

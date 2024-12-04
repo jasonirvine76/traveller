@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <!-- Main Content -->
+    <main class="container mx-auto my-8 px-4">
+        <div class="bg-white shadow-md rounded-md overflow-hidden">
+            <!-- Title and Hero Section -->
+            <div class="relative bg-blue-700 text-white py-10 px-6">
+                <h2 class="text-4xl font-bold">{{ province_data.label }}</h2>
+                <div class="absolute inset-0 bg-blue-900 opacity-20"></div>
+            </div>
+
+            <!-- Main Body -->
+            <div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <!-- Main Content Section -->
+                <div class="lg:col-span-2">
+                    
+                    <!-- Map Section -->
+                    <section class="mb-6">
+                        <h3 class="text-2xl font-semibold mb-2">Map</h3>
+                        <iframe 
+                            src="https://www.google.com/maps?q={{ province_data.latitude }},{{ province_data.longitude }}&output=embed"
+                            class="w-full h-64 rounded-md shadow-md"
+                            allowfullscreen>
+                        </iframe>
+                    </section>
+                </div>
+
+                <!-- Infobox Section -->
+                <aside class="bg-gray-50 p-4 rounded-md shadow-md lg:col-span-1">
+                    <h3 class="text-xl font-semibold mb-4 text-center">{{ destination.name }}</h3>
+                    <div class="overflow-x-auto">
+                        <table class="table-auto w-full text-sm border-collapse border border-gray-200">
+                            <tbody>
+                                <tr class="bg-gray-100">
+                                    <td class="font-medium py-2 px-3 border border-gray-200">Inception Date:</td>
+                                    <td class="py-2 px-3 border border-gray-200">{{ province_data.inceptionDate }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium py-2 px-3 border border-gray-200">Population:</td>
+                                    <td class="py-2 px-3 border border-gray-200">{{ province_data.population }}</td>
+                                </tr>
+                                <tr class="bg-gray-100">
+                                    <td class="font-medium py-2 px-3 border border-gray-200">Area:</td>
+                                    <td class="py-2 px-3 border border-gray-200">{{ province_data.area }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium py-2 px-3 border border-gray-200">Cities / Regencies:</td>
+                                    <td class="py-2 px-3 border border-gray-200">
+                                        <ul id="cityreg-list" class="list-disc pl-4 space-y-2">
+                                            <!-- Render the first few items -->
+                                            {% for cityreg in province_data.cityregs|slice:":5" %}
+                                            <li>
+                                                <a href="{{ cityreg.iri }}" class="text-blue-600 hover:underline">
+                                                    {{ cityreg.label }}
+                                                </a>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                        <!-- "View More" Button -->
+                                        {% if province_data.cityregs|length > 5 %}
+                                        <button id="view-more-button" class="mt-2 text-sm text-blue-600 hover:underline">
+                                            View More
+                                        </button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr class="bg-gray-100">
+                                    <td class="font-medium py-2 px-3 border border-gray-200">External Link</td>
+                                    <td class="py-2 px-3 border border-gray-200">
+                                        <a href="{{ province_data.externalLink }}" class="text-blue-600 hover:underline">
+                                            {{ province_data.externalLink }}
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const cityregList = document.getElementById("cityreg-list");
+            const viewMoreButton = document.getElementById("view-more-button");
+
+            const allCityRegs = {{ province_data.cityregs|safe }};
+
+            if (viewMoreButton) {
+                viewMoreButton.addEventListener("click", () => {
+                    const additionalItems = allCityRegs.slice(5).map(cityreg => {
+                        const li = document.createElement("li");
+                        const a = document.createElement("a");
+                        a.href = cityreg.iri;
+                        a.textContent = cityreg.label;
+                        a.className = "text-blue-600 hover:underline";
+                        li.appendChild(a);
+                        return li;
+                    });
+
+                    additionalItems.forEach(item => cityregList.appendChild(item));
+
+                    viewMoreButton.style.display = "none";
+                });
+            }
+        });
+    </script>
+
+{% endblock %}
