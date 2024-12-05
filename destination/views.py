@@ -5,7 +5,7 @@ from rdfstore.views import query_graphdb
 
 def get_destination_by_id(request, id):
     sparql_query = f"""
-    PREFIX data: <http://tourism-2024.org/data/>
+    PREFIX data: <http://localhost:7200/data/>
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
