@@ -18,5 +18,4 @@ def get_regency_by_name(request, name):
         "located_in": regency_data.get("located_in", "-"),
         "contains_entity": regency_data.get("contains_entities", "-"),
     }
-    print(regency_details)
     return render(request, 'regency-page.html', {'regency_data': regency_details})
