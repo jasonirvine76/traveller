@@ -63,7 +63,6 @@ def get_destination_by_id(request, id):
                 "official_website":wikidata_data.get("official_website") if wikidata_data else None,
             }
 
-            # Extract user ratings and optional user details
             for binding in bindings:
                 user = binding.get("user", {}).get("value", "-").split("/")[-1]
                 user_rating = binding.get("userRating", {}).get("value", "-")
@@ -75,7 +74,7 @@ def get_destination_by_id(request, id):
                     user_ratings.append({
                         "user": user,
                         "rating": user_rating,
-                        "from": user_from,
+                        "from": user_from,  
                         "age": user_age,
                         "id": user_id,
                     })

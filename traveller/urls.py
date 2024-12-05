@@ -24,4 +24,5 @@ urlpatterns = [
     path('destination/', include("destination.urls")),
     path('province/', include("province.urls")),
     path('', include("homepage.urls")),
+    path('regency/', include("regency.urls")),
 ]
