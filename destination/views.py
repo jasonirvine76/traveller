@@ -66,7 +66,7 @@ def get_destination_by_id(request, id):
             for binding in bindings:
                 user = binding.get("user", {}).get("value", "-").split("/")[-1]
                 user_rating = binding.get("userRating", {}).get("value", "-")
-                user_from = binding.get("userFrom", {}).get("value", "-").split("/")[-1]  
+                user_from = binding.get("userFrom", {}).get("value", "-").split("/")[-1].replace("_", " ")  
                 user_age = binding.get("userAge", {}).get("value", "-")
                 user_id = binding.get("userId", {}).get("value", "-")
 

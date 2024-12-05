@@ -1,98 +1,126 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <!-- Main Content -->
-    <main class="container mx-auto my-8 px-4">
-        <div class="bg-white shadow-md rounded-md overflow-hidden">
-            <!-- Title and Hero Section -->
-            <div class="relative bg-blue-700 text-white py-10 px-6">
-                <h2 class="text-4xl font-bold">{{ regency_data.label }}</h2>
-                <div class="absolute inset-0 bg-blue-900 opacity-20"></div>
-            </div>
-
-            <!-- Main Body -->
-            <div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <!-- Main Content Section -->
-                <div class="lg:col-span-2">
-                    
-                    <!-- Map Section -->
-                    <section class="mb-6">
-                        <h3 class="text-2xl font-semibold mb-2">Map</h3>
-                        {% if regency_data.coordinates %}
-                            <iframe 
-                                src="https://www.google.com/maps?q={{ regency_data.coordinates }}&output=embed"
-                                class="w-full h-64 rounded-md shadow-md"
-                                allowfullscreen>
-                            </iframe>
-                        {% else %}
-                            <p>No map available for this regency.</p>
-                        {% endif %}
-                    </section>
-                </div>
-
-                <!-- Infobox Section -->
-                <aside class="bg-gray-50 p-4 rounded-md shadow-md lg:col-span-1">
-                    <h3 class="text-xl font-semibold mb-4 text-center">{{ regency_data.label }}</h3>
-                    <div class="overflow-x-auto">
-                        <table class="table-auto w-full text-sm border-collapse border border-gray-200">
-                            <tbody>
-                                <tr class="bg-gray-100">
-                                    <td class="font-medium py-2 px-3 border border-gray-200">Country:</td>
-                                    <td class="py-2 px-3 border border-gray-200">{{ regency_data.country }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-medium py-2 px-3 border border-gray-200">Located In:</td>
-                                    <td class="py-2 px-3 border border-gray-200">{{ regency_data.located_in }}</td>
-                                </tr>
-                                <tr class="bg-gray-100">
-                                    <td class="font-medium py-2 px-3 border border-gray-200">Contains Entities:</td>
-                                    <td class="py-2 px-3 border border-gray-200">{{ regency_data.contains_entity }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-medium py-2 px-3 border border-gray-200">Wikidata ID:</td>
-                                    <td class="py-2 px-3 border border-gray-200">{{ regency_data.wikidata_id }}</td>
-                                </tr>
-                                {% if regency_data.image %}
-                                <tr class="bg-gray-100">
-                                    <td class="font-medium py-2 px-3 border border-gray-200">Image:</td>
-                                    <td class="py-2 px-3 border border-gray-200">
-                                        <img src="{{ regency_data.image }}" alt="{{ regency_data.label }}" class="w-full h-auto">
-                                    </td>
-                                </tr>
-                                {% endif %}
-                            </tbody>
-                        </table>
-                    </div>
-                </aside>
-            </div>
+<!-- Main Content -->
+<main class="container mx-auto my-8 px-4">
+    <div class="bg-white shadow-md rounded-md overflow-hidden">
+        <!-- Title and Hero Section -->
+        <div class="relative bg-blue-700 text-white py-10 px-6">
+            <h2 class="text-4xl font-bold">{{ regency_data.name }}</h2>
+            <p class="mt-2 text-lg italic">Regency</p>
+            <div class="absolute inset-0 bg-blue-900 opacity-20"></div>
         </div>
-    </main>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const cityregList = document.getElementById("cityreg-list");
-            const viewMoreButton = document.getElementById("view-more-button");
+        <!-- Main Body -->
+        <div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <!-- Main Content Section -->
+            <div class="lg:col-span-2">
+                <!-- Map Section -->
+                <section class="mb-6">
+                    <h3 class="text-2xl font-semibold mb-2">Map</h3>
+                    {% if regency_data.coordinates %}
+                    <iframe 
+                        src="https://www.google.com/maps?q={{ regency_data.coordinates.latitude }},{{ regency_data.coordinates.longitude }}&output=embed"
+                        class="w-full h-64 rounded-md shadow-md"
+                        allowfullscreen>
+                    </iframe>
+                    {% else %}
+                        <p>No map available for this regency.</p>
+                    {% endif %}
+                </section>
+            </div>
 
-            const allCityRegs = {{ regency_data.cityregs|safe }};
+            <!-- Infobox Section -->
+            <aside class="bg-gray-50 p-4 rounded-md shadow-md lg:col-span-1">
+                <h3 class="text-xl font-semibold mb-4 text-center">{{ regency_data.label }}</h3>
+                <div class="overflow-x-auto">
+                    <table class="table-auto w-full text-sm border-collapse border border-gray-200">
+                        <tbody>
+                            {% if regency_data.coat %}
+                            <tr>
+                                <td colspan="2">
+                                    <div class="flex justify-center mb-8">
+                                        <img src="{{ regency_data.coat }}" alt="{{ regency_data.coat }}" 
+                                             class="max-w-full min-h-32 max-h-64 w-auto h-auto rounded-md">
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endif %}
+                            <tr class="bg-gray-100">
+                                <td class="font-medium py-2 px-3 border border-gray-200">Country:</td>
+                                <td class="py-2 px-3 border border-gray-200">{{ regency_data.country }}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium py-2 px-3 border border-gray-200">Located In:</td>
+                                <td class="py-2 px-3 border border-gray-200">
+                                    <a href="/province/{{ regency_data.located_in_with_underscore }}" class="text-blue-600 hover:underline">
+                                        {{ regency_data.located_in }}
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr class="bg-gray-100">
+                                <td class="font-medium py-2 px-3 border border-gray-200">Towns:</td>
+                                <td class="py-2 px-3 border border-gray-200">
+                                    {% if regency_data.contains_entity %}
+                                        <ul class="list-disc pl-4">
+                                            {% for entity in regency_data.contains_entity %}
+                                                <li>
+                                                    <a href="/entity/{{ entity }}" class="text-blue-600 hover:underline">
+                                                        {{ entity }}
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <p>No towns available.</p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium py-2 px-3 border border-gray-200">External Link:</td>
+                                <td class="py-2 px-3 border border-gray-200">{{ regency_data.wikidata_id }}</td>
+                            </tr>
+                            {% if regency_data.image %}
+                            <tr class="bg-gray-100">
+                                <td class="font-medium py-2 px-3 border border-gray-200">Image:</td>
+                                <td class="py-2 px-3 border border-gray-200">
+                                    <img src="{{ regency_data.image }}" alt="{{ regency_data.label }}" class="w-full h-auto">
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </aside>
+        </div>
+    </div>
+</main>
 
-            if (viewMoreButton) {
-                viewMoreButton.addEventListener("click", () => {
-                    const additionalItems = allCityRegs.slice(5).map(cityreg => {
-                        const li = document.createElement("li");
-                        const a = document.createElement("a");
-                        a.href = cityreg.iri;
-                        a.textContent = cityreg.label;
-                        a.className = "text-blue-600 hover:underline";
-                        li.appendChild(a);
-                        return li;
-                    });
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const cityregList = document.getElementById("cityreg-list");
+        const viewMoreButton = document.getElementById("view-more-button");
 
-                    additionalItems.forEach(item => cityregList.appendChild(item));
+        const allCityRegs = {{ regency_data.cityregs|safe }};
 
-                    viewMoreButton.style.display = "none";
+        if (viewMoreButton) {
+            viewMoreButton.addEventListener("click", () => {
+                const additionalItems = allCityRegs.slice(5).map(cityreg => {
+                    const li = document.createElement("li");
+                    const a = document.createElement("a");
+                    a.href = cityreg.iri;
+                    a.textContent = cityreg.label;
+                    a.className = "text-blue-600 hover:underline";
+                    li.appendChild(a);
+                    return li;
                 });
-            }
-        });
-    </script>
+
+                additionalItems.forEach(item => cityregList.appendChild(item));
+
+                viewMoreButton.style.display = "none";
+            });
+        }
+    });
+</script>
 
 {% endblock %}
